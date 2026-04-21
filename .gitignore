@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+build/
+dist/
+*.egg-info/
+
+# Local inputs and generated outputs
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.tif
+*.tiff
+output/
+outputs/
+runs/
+work/
+rendered/
+groups/
+final/
+summary.json
+vlm-request.json
+
+# LaTeX intermediates
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+

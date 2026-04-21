@@ -1,0 +1,8 @@
+interface:
+  display_name: "SheetWeave"
+  short_description: "Weave tiled drawing PDFs into one vector output."
+  brand_color: "#1F7A6D"
+  default_prompt: "Use $sheetweave to merge this tiled drawing PDF into a single vector PDF."
+
+policy:
+  allow_implicit_invocation: true
