@@ -23,7 +23,11 @@
 
 SheetWeave 是一个 agent skill，不是让你手动操作的独立应用。你只需要把图纸 PDF 交给 agent，并要求它使用 `$sheetweave`；skill 会提供图纸布局恢复、脚本工具和结果检查流程，帮助 agent 输出完整的矢量 PDF。
 
-## 它解决什么问题？
+<p align="center">
+  <img src="assets/sheetweave-overview.svg" alt="SheetWeave 通过 agent skill 把分块图纸 PDF 变成完整矢量 PDF" width="100%">
+</p>
+
+## 🧭 它解决什么问题？
 
 很多施工、建筑、工程图纸 PDF 会被拆成多张局部图纸。真正困难的地方不只是把图片贴起来，而是判断每一张局部图纸在整体图纸中的位置，同时让最终结果保持矢量清晰度。
 
@@ -40,9 +44,23 @@ SheetWeave 是一个 agent skill，不是让你手动操作的独立应用。你
 
 > SheetWeave 是图纸布局恢复 skill，不是栅格截图拼接器。
 
-## 快速开始
+## 🟢 最简单的安装方式
 
-### 1. 安装到你的 agent skill 目录
+如果你不是计算机领域用户，不需要从命令行开始。直接打开你的 agent，对它说：
+
+```text
+请帮我安装 https://github.com/WorkHaH/SheetWeave 这个 skill，然后用它把我的图纸 PDF 拼成一张完整的矢量 PDF。
+```
+
+也可以说：
+
+```text
+Please install the SheetWeave skill from https://github.com/WorkHaH/SheetWeave, then use it to merge my drawing PDF into one vector PDF.
+```
+
+agent 应该会帮你安装 skill、检查需要的 PDF 工具，并告诉你还缺什么。
+
+## ⚙️ 手动安装
 
 推荐方式：
 
@@ -64,7 +82,7 @@ git clone https://github.com/WorkHaH/SheetWeave.git ~/.agents/skills/sheetweave
 
 安装后重启或刷新你的 agent，让它能够发现 `SKILL.md`。
 
-### 2. 直接让 agent 使用它
+## 💬 直接让 agent 使用它
 
 常见提示词：
 
@@ -80,11 +98,11 @@ Use $sheetweave to merge this drawing PDF into one vector PDF: ./drawings.pdf
 用 $sheetweave 处理 ./drawings.pdf。如果缩略图匹配不明确，不要猜，先生成 VLM 布局请求。
 ```
 
-### 3. 检查结果
+## 🔍 检查结果
 
 agent 应该先检查 `summary.json` 和 PNG 预览图，再把矢量 PDF 视为最终结果。
 
-## 工作流程
+## 🧵 工作流程
 
 ```mermaid
 flowchart LR
@@ -99,7 +117,7 @@ flowchart LR
   H --> I["完整矢量 PDF"]
 ```
 
-## Agent 会产出什么？
+## 📦 Agent 会产出什么？
 
 ```text
 output/run/
@@ -113,7 +131,7 @@ output/run/
   vlm-request.json             # 总览图映射需要人工/VLM 帮助时生成
 ```
 
-## 运行环境
+## 🛠️ 运行环境
 
 这个 skill 包含 Python 脚本，因为 PDF 渲染、重叠匹配和矢量组装需要确定性的工具。agent 可以在需要时检查或安装这些依赖。
 
@@ -130,13 +148,13 @@ output/run/
 pip install -r scripts/requirements.txt
 ```
 
-## 人工 / VLM 总览图映射
+## 👁️ 人工 / VLM 总览图映射
 
 当自动总览图匹配不明确时，SheetWeave 会写出 `vlm-request.json`。agent 应该读取 [`references/overview_layout_prompt.md`](references/overview_layout_prompt.md)，让视觉模型或人工把总览图区域映射到 PDF 页面，然后用 `--overview-layout-json` 重新运行。
 
 这个 fallback 是故意偏审慎的：如果不能高置信匹配，就暴露不确定性，而不是静默猜测。
 
-## 质量标准
+## ✅ 质量标准
 
 一次好的 SheetWeave 运行应该：
 
@@ -146,7 +164,7 @@ pip install -r scripts/requirements.txt
 - 保留预览和诊断产物，方便人工确认拼接是否正确。
 - 当布局没有解决时，优雅退化为多个分组或 VLM 请求，而不是假装成功。
 
-## 仓库结构
+## 🗂️ 仓库结构
 
 ```text
 sheetweave/
@@ -164,9 +182,8 @@ sheetweave/
     overview_layout_prompt.md      # 人工/VLM 映射提示词
 ```
 
-## 当前限制
+## ⚠️ 当前限制
 
 - 超大画布可能会触发某些 LaTeX 发行版的页面尺寸限制。
 - 推断桥接边属于几何推断；关键场景请检查 `summary.json` 和 `full-merged.png`。
 - 仓库刻意不包含真实图纸 PDF 和生成结果。如需添加样例，请只添加许可明确的公开素材。
-

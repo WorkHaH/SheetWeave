@@ -23,7 +23,11 @@
 
 SheetWeave is an agent skill, not a standalone app you are expected to operate by hand. Give your agent a drawing PDF and ask it to use `$sheetweave`; the skill provides the workflow, scripts, and review checkpoints needed to recover the layout and produce a merged vector PDF.
 
-## What Problem Does It Solve?
+<p align="center">
+  <img src="assets/sheetweave-overview.svg" alt="SheetWeave turns a tiled drawing PDF into one merged vector PDF through an agent skill" width="100%">
+</p>
+
+## 🧭 What Problem Does It Solve?
 
 Many construction, architecture, and engineering PDFs are split into local/detail sheets. The hard part is not just stitching images together; it is recovering where each sheet belongs while keeping the final drawing sharp and vector-based.
 
@@ -40,9 +44,23 @@ In one sentence:
 
 > SheetWeave is a drawing-layout recovery skill, not a raster screenshot stitcher.
 
-## Quick Start
+## 🟢 Easiest Install
 
-### 1. Install the skill into your agent
+If you are not a developer, do not start with terminal commands. Open your agent and say:
+
+```text
+Please install the SheetWeave skill from https://github.com/WorkHaH/SheetWeave, then use it to merge my drawing PDF into one vector PDF.
+```
+
+Or in Chinese:
+
+```text
+请帮我安装 https://github.com/WorkHaH/SheetWeave 这个 skill，然后用它把我的图纸 PDF 拼成一张完整的矢量 PDF。
+```
+
+The agent should install the skill, check the required PDF tools, and tell you if anything is missing.
+
+## ⚙️ Install Manually
 
 Recommended:
 
@@ -64,7 +82,7 @@ For a project-local skill, place it under:
 
 Restart or reload your agent after installation so it can discover `SKILL.md`.
 
-### 2. Ask your agent to use it
+## 💬 Ask Your Agent To Use It
 
 Typical prompts:
 
@@ -80,11 +98,11 @@ Use $sheetweave to merge this drawing PDF into one vector PDF: ./drawings.pdf
 Use $sheetweave on ./drawings.pdf. If the overview matching is ambiguous, prepare a VLM layout request instead of guessing.
 ```
 
-### 3. Review the result
+## 🔍 Review The Result
 
 The agent should inspect `summary.json` and the PNG preview before treating the vector PDF as final.
 
-## How It Works
+## 🧵 How It Works
 
 ```mermaid
 flowchart LR
@@ -99,7 +117,7 @@ flowchart LR
   H --> I["Merged vector PDF"]
 ```
 
-## What The Agent Produces
+## 📦 What The Agent Produces
 
 ```text
 output/run/
@@ -113,7 +131,7 @@ output/run/
   vlm-request.json             # written when overview mapping needs help
 ```
 
-## Runtime Environment
+## 🛠️ Runtime Environment
 
 The skill includes Python scripts because PDF rendering, overlap matching, and vector assembly need deterministic tooling. Your agent may check or install these dependencies when needed.
 
@@ -130,13 +148,13 @@ If you want to prepare the machine manually:
 pip install -r scripts/requirements.txt
 ```
 
-## Manual / VLM Overview Mapping
+## 👁️ Manual / VLM Overview Mapping
 
 When automatic overview matching is ambiguous, SheetWeave writes `vlm-request.json`. The agent should then read [`references/overview_layout_prompt.md`](references/overview_layout_prompt.md), ask a vision model or human to map overview regions to PDF pages, and rerun with `--overview-layout-json`.
 
 This fallback is intentionally review-first: if the overview cannot be matched confidently, the skill should expose uncertainty instead of silently guessing.
 
-## Quality Bar
+## ✅ Quality Bar
 
 A good SheetWeave run should:
 
@@ -146,7 +164,7 @@ A good SheetWeave run should:
 - Preserve review artifacts so a human can verify alignment before using the result.
 - Degrade gracefully into groups or a VLM request when the layout is not solved.
 
-## Repository Layout
+## 🗂️ Repository Layout
 
 ```text
 sheetweave/
@@ -164,9 +182,8 @@ sheetweave/
     overview_layout_prompt.md      # prompt for manual/VLM mapping
 ```
 
-## Current Limitations
+## ⚠️ Current Limitations
 
 - Very large canvases may hit LaTeX page-size limits depending on the TeX distribution.
 - Synthetic bridge edges are geometric inferences; review `summary.json` and `full-merged.png` for critical work.
 - The repository intentionally excludes real drawing PDFs and generated outputs. Add only public fixtures with clear licenses.
-
