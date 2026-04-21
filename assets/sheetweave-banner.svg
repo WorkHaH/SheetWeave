@@ -1,0 +1,60 @@
+<svg width="1200" height="360" viewBox="0 0 1200 360" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">SheetWeave banner</title>
+  <desc id="desc">Tiled vector PDF sheets being woven into one complete drawing.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="360" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B1720"/>
+      <stop offset="0.55" stop-color="#12352F"/>
+      <stop offset="1" stop-color="#F1C376"/>
+    </linearGradient>
+    <linearGradient id="tile" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#F8FCF8"/>
+      <stop offset="1" stop-color="#D8EEE5"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="14" flood-color="#061014" flood-opacity="0.28"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="360" rx="34" fill="url(#bg)"/>
+  <path d="M844 36C954 26 1046 56 1136 116" stroke="#FFE2A6" stroke-width="2" stroke-opacity="0.26"/>
+  <path d="M825 304C941 270 1035 286 1158 322" stroke="#F8FCF8" stroke-width="2" stroke-opacity="0.2"/>
+  <circle cx="1040" cy="80" r="110" fill="#FFE2A6" fill-opacity="0.08"/>
+  <circle cx="1134" cy="300" r="72" fill="#0B1720" fill-opacity="0.12"/>
+
+  <g filter="url(#shadow)">
+    <rect x="692" y="82" width="150" height="96" rx="13" fill="url(#tile)" transform="rotate(-8 692 82)"/>
+    <rect x="730" y="184" width="150" height="96" rx="13" fill="url(#tile)" transform="rotate(6 730 184)"/>
+    <rect x="876" y="62" width="150" height="96" rx="13" fill="url(#tile)" transform="rotate(6 876 62)"/>
+    <rect x="900" y="174" width="150" height="96" rx="13" fill="url(#tile)" transform="rotate(-5 900 174)"/>
+    <rect x="1018" y="118" width="150" height="96" rx="13" fill="url(#tile)" transform="rotate(8 1018 118)"/>
+  </g>
+
+  <g stroke="#1F7A6D" stroke-width="4" stroke-linecap="round" opacity="0.72">
+    <path d="M716 112L812 100"/>
+    <path d="M716 132L790 122"/>
+    <path d="M756 150L818 142"/>
+    <path d="M756 222L858 234"/>
+    <path d="M770 244L842 252"/>
+    <path d="M908 96L1008 108"/>
+    <path d="M924 118L988 126"/>
+    <path d="M928 210L1026 202"/>
+    <path d="M946 232L1006 226"/>
+    <path d="M1048 152L1140 166"/>
+    <path d="M1062 174L1128 184"/>
+  </g>
+
+  <g opacity="0.45" stroke="#FFE2A6" stroke-width="4" stroke-linecap="round">
+    <path d="M850 150C880 166 890 184 914 196"/>
+    <path d="M875 112C900 108 914 114 936 122"/>
+    <path d="M1008 158C1028 154 1046 156 1068 162"/>
+  </g>
+
+  <text x="72" y="130" fill="#F8FCF8" font-family="Georgia, 'Times New Roman', serif" font-size="74" font-weight="700">SheetWeave</text>
+  <text x="77" y="174" fill="#FFE2A6" font-family="Segoe UI, Arial, sans-serif" font-size="24" letter-spacing="0.08em">VECTOR PDF DRAWING STITCHING SKILL</text>
+  <text x="76" y="226" fill="#D8EEE5" font-family="Segoe UI, Arial, sans-serif" font-size="25">Recover the layout from tiled sheets.</text>
+  <text x="76" y="264" fill="#D8EEE5" font-family="Segoe UI, Arial, sans-serif" font-size="25">Export the final plan as vector PDF.</text>
+  <rect x="76" y="292" width="230" height="42" rx="21" fill="#F8FCF8" fill-opacity="0.14" stroke="#F8FCF8" stroke-opacity="0.28"/>
+  <text x="102" y="320" fill="#F8FCF8" font-family="Segoe UI, Arial, sans-serif" font-size="18">overview-aware</text>
+  <rect x="326" y="292" width="178" height="42" rx="21" fill="#F8FCF8" fill-opacity="0.14" stroke="#F8FCF8" stroke-opacity="0.28"/>
+  <text x="354" y="320" fill="#F8FCF8" font-family="Segoe UI, Arial, sans-serif" font-size="18">vector-first</text>
+</svg>

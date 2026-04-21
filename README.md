@@ -1,70 +1,123 @@
-# SheetWeave
+<p align="center">
+  <img src="assets/sheetweave-banner.svg" alt="SheetWeave: vector PDF drawing stitching skill" width="100%">
+</p>
 
-An open-source Codex/agent skill for weaving tiled vector drawing PDFs into one larger vector PDF.
+<p align="center">
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-1F7A6D.svg"></a>
+  <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-1F7A6D.svg">
+  <img alt="Skill format" src="https://img.shields.io/badge/agent%20skill-SKILL.md-F1C376.svg">
+  <img alt="Vector output" src="https://img.shields.io/badge/output-vector%20PDF-F1C376.svg">
+</p>
 
-The skill is designed for PDFs that contain multiple local/detail drawing pages. If an overview or index page exists, the skill uses it to recover the sheet layout. If no overview exists, it falls back to traditional overlap-based neighbor matching. Raster rendering is used only for layout analysis and review images; the final merged PDF embeds the original source PDF pages to preserve vector content.
+<h1 align="center">SheetWeave</h1>
 
-## Skill Layout
+<p align="center">
+  An open-source agent skill for weaving tiled vector drawing PDFs into one complete vector plan.
+</p>
+
+---
+
+## Why SheetWeave?
+
+Many construction, architecture, and engineering PDFs are split into local/detail sheets. SheetWeave helps an agent recover how those sheets fit together, then exports the final merged drawing without flattening the source vector content into a raster image.
+
+| Problem | SheetWeave approach |
+| --- | --- |
+| PDF has an overview/index page | Detect the overview and use labels, numeric markers, or visual regions as layout hints. |
+| Overview has weak or missing labels | Fall back to visual matching and optional VLM/manual overview JSON. |
+| PDF has no overview page | Use traditional overlap-based neighbor matching. |
+| Some pieces only connect through small overlaps | Run selective high-DPI bridge recovery instead of rendering every page at high DPI. |
+| Final output must stay editable/sharp | Embed original PDF pages into a larger LaTeX/TikZ vector canvas. |
+
+## Quick Start
+
+```bash
+git clone https://github.com/WorkHaH/SheetWeave.git
+cd SheetWeave
+pip install -r scripts/requirements.txt
+python scripts/sheetweave.py --pdf path/to/drawings.pdf --out output/run --mode review
+```
+
+You also need these command-line tools in `PATH`:
+
+| Tool | Used for |
+| --- | --- |
+| `pdfinfo` | Read PDF metadata and page count. |
+| `pdftoppm` | Render low-resolution previews for layout recovery. |
+| `pdftotext` | Extract overview labels and sheet codes. |
+| `pdflatex` | Assemble the final vector PDF canvas. |
+
+## How It Works
+
+```mermaid
+flowchart LR
+  A["Input PDF<br/>detail sheets + optional overview"] --> B["Low-DPI render<br/>fast layout analysis"]
+  B --> C{"Overview found?"}
+  C -- yes --> D["Label / numeric / visual<br/>overview matching"]
+  C -- no --> E["Overlap-based<br/>neighbor graph"]
+  D --> F["Bridge recovery<br/>high-DPI only where needed"]
+  E --> F
+  F --> G["Solve page transforms"]
+  G --> H["LaTeX/TikZ assembly<br/>original PDF pages embedded"]
+  H --> I["Merged vector PDF"]
+```
+
+## Output Preview
 
 ```text
-sheetweave/
-  SKILL.md
-  agents/openai.yaml
-  scripts/
-    sheetweave.py
-    merge_drawings.py
-    merge_pdf_drawings.py
-    vector_pdf_export.py
-    requirements.txt
-  references/
-    overview_layout_prompt.md
+output/run/
+  summary.json                 # mapping, edges, components, final paths
+  final/
+    full-merged.pdf            # vector result when one component is solved
+    full-merged.tex            # generated LaTeX/TikZ source
+    full-merged.png            # raster review preview only
+    layout-contact.png         # overview-guided contact sheet when available
+  groups/group-XX/             # written when disconnected components remain
+  vlm-request.json             # written when overview mapping needs help
 ```
 
-## Runtime Requirements
+## Skill Installation
 
-- Python 3.10 or newer.
-- Poppler command-line tools in `PATH`: `pdfinfo`, `pdftoppm`, `pdftotext`.
-- A LaTeX distribution with `pdflatex` in `PATH`.
-- Python dependencies from `scripts/requirements.txt`.
+SheetWeave is a portable agent skill. The minimum useful payload is `SKILL.md` plus the `scripts/` and `references/` folders.
 
-Install Python dependencies:
+| Agent / setup | Install path example |
+| --- | --- |
+| OpenAI Codex user skill | `~/.agents/skills/sheetweave/` |
+| OpenAI Codex project skill | `.agents/skills/sheetweave/` |
+| Claude-style skill folder | `~/.claude/skills/sheetweave/` |
+| Generic repository usage | Clone and run `python scripts/sheetweave.py ...` |
 
-```bash
-pip install -r scripts/requirements.txt
-```
+## Manual / VLM Overview Mapping
 
-## Usage
-
-From the skill directory:
-
-```bash
-python scripts/sheetweave.py \
-  --pdf path/to/drawings.pdf \
-  --out output/run \
-  --mode review
-```
-
-With a manual or VLM-produced overview mapping:
+When automatic overview matching is ambiguous, SheetWeave writes `vlm-request.json`. Use [`references/overview_layout_prompt.md`](references/overview_layout_prompt.md) with the overview image and page previews to create a JSON mapping, then rerun:
 
 ```bash
 python scripts/sheetweave.py \
   --pdf path/to/drawings.pdf \
   --overview-layout-json path/to/overview-layout.json \
-  --out output/run \
+  --out output/run-with-layout \
   --mode review
 ```
 
-## Outputs
+## Repository Layout
 
-- `summary.json`: run summary, page mapping, graph edges, and final output paths.
-- `final/full-merged.pdf`: merged vector PDF when the layout resolves into one component.
-- `final/full-merged.tex`: generated LaTeX/TikZ source used for vector assembly.
-- `final/full-merged.png`: raster preview for review only.
-- `final/layout-contact.png`: overview-guided contact sheet when overview mode succeeds.
-- `vlm-request.json`: ambiguity handoff data when automatic overview matching is weak.
+```text
+sheetweave/
+  SKILL.md                         # skill entry point loaded by agents
+  agents/openai.yaml               # OpenAI Codex UI metadata
+  scripts/
+    sheetweave.py                  # main CLI
+    merge_drawings.py              # overlap scoring and raster diagnostics
+    merge_pdf_drawings.py          # legacy PDF helpers and overview parsing
+    vector_pdf_export.py           # vector PDF assembly
+    requirements.txt               # Python dependencies
+  references/
+    overview_layout_prompt.md      # prompt for manual/VLM mapping
+```
 
-If the drawing set splits into disconnected groups, outputs are written under `groups/group-XX/`.
+## Current Limitations
 
-## Publishing Notes
+- Very large canvases may hit LaTeX page-size limits depending on the TeX distribution.
+- Synthetic bridge edges are geometric inferences; review `summary.json` and `full-merged.png` for critical work.
+- The repository intentionally excludes real drawing PDFs and generated outputs. Add only public fixtures with clear licenses.
 
-This repository intentionally excludes sample PDFs and generated outputs. Before publishing to GitHub, add only public fixtures with clear licenses, if any. The default license is MIT; change `LICENSE` if you need a different open-source license.
