@@ -1,0 +1,86 @@
+<svg width="1200" height="620" viewBox="0 0 1200 620" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">SheetWeave decision flow</title>
+  <desc id="desc">Decision flow: detect overview, parse labels, use VLM for visible but unreadable labels, or use overlap matching when there are no labels or no overview.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="620" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FCF8"/>
+      <stop offset="1" stop-color="#E6F4EE"/>
+    </linearGradient>
+    <linearGradient id="dark" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#0B1720"/>
+      <stop offset="1" stop-color="#143E36"/>
+    </linearGradient>
+    <filter id="shadow" x="-12%" y="-18%" width="124%" height="136%">
+      <feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#061014" flood-opacity="0.16"/>
+    </filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M2 2L10 6L2 10" stroke="#1F7A6D" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="620" rx="34" fill="url(#bg)"/>
+  <text x="600" y="56" text-anchor="middle" fill="#0B1720" font-family="Georgia, 'Times New Roman', serif" font-size="38" font-weight="700">SheetWeave Decision Flow</text>
+  <text x="600" y="88" text-anchor="middle" fill="#49605A" font-family="Segoe UI, Arial, sans-serif" font-size="18">Use the overview when it really helps. Fall back to overlap matching when it does not.</text>
+
+  <g filter="url(#shadow)" font-family="Segoe UI, Arial, sans-serif">
+    <rect x="80" y="132" width="250" height="86" rx="22" fill="#FFFFFF" stroke="#D3E8DF"/>
+    <text x="205" y="168" text-anchor="middle" fill="#0B1720" font-size="22" font-weight="700">Input PDF</text>
+    <text x="205" y="195" text-anchor="middle" fill="#49605A" font-size="16">local drawing sheets</text>
+
+    <rect x="475" y="124" width="250" height="102" rx="24" fill="#FFFFFF" stroke="#1F7A6D" stroke-width="2"/>
+    <text x="600" y="160" text-anchor="middle" fill="#0B1720" font-size="21" font-weight="700">Overview page?</text>
+    <text x="600" y="188" text-anchor="middle" fill="#49605A" font-size="15">usually first or last page</text>
+
+    <rect x="475" y="278" width="250" height="102" rx="24" fill="#FFFFFF" stroke="#1F7A6D" stroke-width="2"/>
+    <text x="600" y="314" text-anchor="middle" fill="#0B1720" font-size="21" font-weight="700">Labels visible?</text>
+    <text x="600" y="342" text-anchor="middle" fill="#49605A" font-size="15">sheet code / number markers</text>
+
+    <rect x="120" y="278" width="250" height="102" rx="24" fill="#FFFFFF" stroke="#1F7A6D" stroke-width="2"/>
+    <text x="245" y="314" text-anchor="middle" fill="#0B1720" font-size="21" font-weight="700">Code-readable?</text>
+    <text x="245" y="342" text-anchor="middle" fill="#49605A" font-size="15">OCR / PDF text can extract them</text>
+
+    <rect x="120" y="452" width="250" height="86" rx="22" fill="#FFFFFF" stroke="#D3E8DF"/>
+    <text x="245" y="488" text-anchor="middle" fill="#0B1720" font-size="20" font-weight="700">Auto label route</text>
+    <text x="245" y="514" text-anchor="middle" fill="#49605A" font-size="15">map pages by labels</text>
+
+    <rect x="475" y="452" width="250" height="86" rx="22" fill="#FFFFFF" stroke="#D3E8DF"/>
+    <text x="600" y="488" text-anchor="middle" fill="#0B1720" font-size="20" font-weight="700">VLM layout route</text>
+    <text x="600" y="514" text-anchor="middle" fill="#49605A" font-size="15">visible labels, not code-readable</text>
+
+    <rect x="830" y="278" width="250" height="102" rx="24" fill="#FFFFFF" stroke="#1F7A6D" stroke-width="2"/>
+    <text x="955" y="314" text-anchor="middle" fill="#0B1720" font-size="21" font-weight="700">Traditional route</text>
+    <text x="955" y="342" text-anchor="middle" fill="#49605A" font-size="15">no overview or no labels</text>
+
+    <rect x="830" y="452" width="250" height="86" rx="22" fill="url(#dark)"/>
+    <text x="955" y="488" text-anchor="middle" fill="#F8FCF8" font-size="20" font-weight="700">Vector merged PDF</text>
+    <text x="955" y="514" text-anchor="middle" fill="#FFE2A6" font-size="15">original PDF pages embedded</text>
+  </g>
+
+  <g stroke="#1F7A6D" stroke-width="4" stroke-linecap="round" marker-end="url(#arrow)">
+    <path d="M330 175H464"/>
+    <path d="M600 226V266"/>
+    <path d="M475 329H382"/>
+    <path d="M245 380V440"/>
+    <path d="M600 380V440"/>
+    <path d="M725 329H818"/>
+    <path d="M955 380V440"/>
+    <path d="M370 495H463"/>
+    <path d="M725 495H818"/>
+  </g>
+
+  <g font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">
+    <rect x="588" y="238" width="42" height="24" rx="12" fill="#1F7A6D"/>
+    <text x="609" y="255" text-anchor="middle" fill="#FFFFFF">yes</text>
+    <rect x="382" y="306" width="42" height="24" rx="12" fill="#1F7A6D"/>
+    <text x="403" y="323" text-anchor="middle" fill="#FFFFFF">yes</text>
+    <rect x="745" y="306" width="42" height="24" rx="12" fill="#F1C376"/>
+    <text x="766" y="323" text-anchor="middle" fill="#0B1720">no</text>
+    <rect x="232" y="402" width="42" height="24" rx="12" fill="#1F7A6D"/>
+    <text x="253" y="419" text-anchor="middle" fill="#FFFFFF">yes</text>
+    <rect x="382" y="470" width="70" height="24" rx="12" fill="#F1C376"/>
+    <text x="417" y="487" text-anchor="middle" fill="#0B1720">visible</text>
+  </g>
+
+  <path d="M725 175C834 175 955 199 955 266" stroke="#1F7A6D" stroke-width="4" stroke-linecap="round" marker-end="url(#arrow)"/>
+  <rect x="826" y="172" width="140" height="25" rx="12.5" fill="#F1C376"/>
+  <text x="896" y="190" text-anchor="middle" fill="#0B1720" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">no overview</text>
+</svg>

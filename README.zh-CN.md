@@ -33,10 +33,10 @@ SheetWeave 是一个 agent skill，不是让你手动操作的独立应用。你
 
 | 你的情况 | SheetWeave 帮 agent 做什么 |
 | --- | --- |
-| PDF 里有缩略图/总览图 | 把总览图作为布局参考。 |
-| 总览图上标号清楚 | 用图纸编号、数字标号匹配局部页面。 |
-| 总览图标号弱或没有标号 | 使用视觉区域匹配，必要时生成 VLM/人工映射请求。 |
-| PDF 里没有总览图 | 使用传统重叠区域匹配，建立相邻关系图。 |
+| PDF 里有缩略图/总览图 | 优先检查最可能的总览页，通常是第一页或最后一页。 |
+| 总览图标号能被代码读取 | 用图纸编号、数字标号自动匹配局部页面。 |
+| 标号人眼可见，但代码获取不到 | 让视觉大模型或人工读取标号，生成 layout JSON。 |
+| PDF 里没有可用总览图，或总览图真的没有标号 | 使用传统重叠区域匹配，建立相邻关系图。 |
 | 有些图纸只通过很小重叠连接 | 只对疑难连接做高 DPI 桥接恢复，避免全量高 DPI 慢跑。 |
 | 最终结果必须是矢量图 | 把原始 PDF 页面放到更大的 LaTeX/TikZ 画布中。 |
 
@@ -104,18 +104,9 @@ agent 应该先检查 `summary.json` 和 PNG 预览图，再把矢量 PDF 视为
 
 ## 🧵 工作流程
 
-```mermaid
-flowchart LR
-  A["输入 PDF<br/>局部图纸 + 可选总览图"] --> B["低 DPI 渲染<br/>仅用于布局分析"]
-  B --> C{"总览图可用？"}
-  C -- 是 --> D["总览图引导匹配<br/>标号、数字、视觉区域"]
-  C -- 否 --> E["传统匹配<br/>重叠区域相邻图"]
-  D --> F["桥接恢复<br/>只对疑难连接高 DPI"]
-  E --> F
-  F --> G["求解页面变换"]
-  G --> H["矢量组装<br/>嵌入原始 PDF 页面"]
-  H --> I["完整矢量 PDF"]
-```
+<p align="center">
+  <img src="assets/sheetweave-decision-flow.svg" alt="SheetWeave 决策流程：标号自动读取、VLM 兜底或传统重叠匹配" width="100%">
+</p>
 
 ## 📦 Agent 会产出什么？
 
@@ -150,9 +141,9 @@ pip install -r scripts/requirements.txt
 
 ## 👁️ 人工 / VLM 总览图映射
 
-当自动总览图匹配不明确时，SheetWeave 会写出 `vlm-request.json`。agent 应该读取 [`references/overview_layout_prompt.md`](references/overview_layout_prompt.md)，让视觉模型或人工把总览图区域映射到 PDF 页面，然后用 `--overview-layout-json` 重新运行。
+当第一页或最后一页存在总览图，并且标号人眼可见但代码无法稳定读取时，SheetWeave 不应该硬猜布局。agent 应该读取 [`references/overview_layout_prompt.md`](references/overview_layout_prompt.md)，让视觉模型或人工把总览图标号/区域映射到 PDF 页面，然后用 `--overview-layout-json` 重新运行。
 
-这个 fallback 是故意偏审慎的：如果不能高置信匹配，就暴露不确定性，而不是静默猜测。
+如果总览图真的没有标号，则不要让 VLM 硬猜编号，应该走传统重叠匹配路线。
 
 ## ✅ 质量标准
 

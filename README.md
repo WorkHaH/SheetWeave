@@ -33,10 +33,10 @@ Many construction, architecture, and engineering PDFs are split into local/detai
 
 | Your situation | What SheetWeave helps the agent do |
 | --- | --- |
-| The PDF includes an overview/index page | Use the overview as the layout guide. |
-| Overview labels are clear | Match detail pages by sheet codes or numeric markers. |
-| Overview labels are weak or missing | Fall back to visual region matching, or ask for manual/VLM mapping. |
-| There is no overview page | Use overlap-based neighbor matching between detail sheets. |
+| The PDF includes an overview/index page | Check the likely overview pages first, usually page 1 or the last page. |
+| Overview labels are machine-readable | Match detail pages by extracted sheet codes or numeric markers. |
+| Labels are visible but code cannot extract them | Ask a vision model or human to read the labels and produce a layout JSON. |
+| There is no usable overview page, or the overview has no labels | Use overlap-based neighbor matching between detail sheets. |
 | Some sheets connect only through small overlaps | Use targeted bridge recovery instead of slow full high-DPI rendering. |
 | The final result must stay vector | Place original PDF pages onto a larger LaTeX/TikZ canvas. |
 
@@ -104,18 +104,9 @@ The agent should inspect `summary.json` and the PNG preview before treating the 
 
 ## 🧵 How It Works
 
-```mermaid
-flowchart LR
-  A["Input PDF<br/>detail sheets + optional overview"] --> B["Low-DPI render<br/>layout analysis only"]
-  B --> C{"Overview usable?"}
-  C -- yes --> D["Overview-guided matching<br/>labels, numbers, visual regions"]
-  C -- no --> E["Traditional matching<br/>overlap neighbor graph"]
-  D --> F["Bridge recovery<br/>high-DPI only where needed"]
-  E --> F
-  F --> G["Solve sheet transforms"]
-  G --> H["Vector assembly<br/>original PDF pages embedded"]
-  H --> I["Merged vector PDF"]
-```
+<p align="center">
+  <img src="assets/sheetweave-decision-flow.svg" alt="SheetWeave decision flow: overview labels, VLM fallback, or traditional overlap matching" width="100%">
+</p>
 
 ## 📦 What The Agent Produces
 
@@ -150,9 +141,9 @@ pip install -r scripts/requirements.txt
 
 ## 👁️ Manual / VLM Overview Mapping
 
-When automatic overview matching is ambiguous, SheetWeave writes `vlm-request.json`. The agent should then read [`references/overview_layout_prompt.md`](references/overview_layout_prompt.md), ask a vision model or human to map overview regions to PDF pages, and rerun with `--overview-layout-json`.
+When a first-page or last-page overview has labels that are visible to a person but not reliably extractable by code, SheetWeave should not guess the layout. The agent should read [`references/overview_layout_prompt.md`](references/overview_layout_prompt.md), ask a vision model or human to map overview labels/regions to PDF pages, and rerun with `--overview-layout-json`.
 
-This fallback is intentionally review-first: if the overview cannot be matched confidently, the skill should expose uncertainty instead of silently guessing.
+If the overview truly has no labels, use the traditional overlap-matching route instead.
 
 ## ✅ Quality Bar
 
