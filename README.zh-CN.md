@@ -24,7 +24,7 @@
 SheetWeave 是一个 agent skill，不是让你手动操作的独立应用。你只需要把图纸 PDF 交给 agent，并要求它使用 `$sheetweave`；skill 会提供图纸布局恢复、脚本工具和结果检查流程，帮助 agent 输出完整的矢量 PDF。
 
 <p align="center">
-  <img src="assets/sheetweave-overview.svg" alt="SheetWeave 通过 agent skill 把分块图纸 PDF 变成完整矢量 PDF" width="100%">
+  <img src="assets/sheetweave-overview.svg" alt="SheetWeave 从分块图纸 PDF 到检查产物和矢量 PDF 输出的高层流程" width="100%">
 </p>
 
 ## 🧭 它解决什么问题？
@@ -105,8 +105,13 @@ agent 应该先检查 `summary.json` 和 PNG 预览图，再把矢量 PDF 视为
 ## 🧵 工作流程
 
 <p align="center">
-  <img src="assets/sheetweave-decision-flow.svg" alt="SheetWeave 决策流程：标号自动读取、VLM 兜底或传统重叠匹配" width="100%">
+  <img src="assets/sheetweave-decision-flow.svg" alt="SheetWeave 决策流程：总览图检测、标号路线、重叠匹配回退、桥接恢复和矢量导出" width="100%">
 </p>
+
+1. SheetWeave 会先渲染低分辨率页面预览，并提取 PDF 文本，用这些轻量信息快速恢复布局；最终输出不会依赖这些栅格预览图。
+2. 脚本会优先检查总览页或索引页，通常是 PDF 的第一页或最后一页。如果总览图标号能被机器读取，就自动建立“局部页面到总览区域”的映射。
+3. 如果标号人眼可见但机器读不稳，agent 应该生成人工或 VLM layout JSON，然后用 `--overview-layout-json` 重新运行。如果没有可用总览图、没有标号，或可信匹配太少，则回退到重叠区域相邻匹配。
+4. 建好页面关系图后，SheetWeave 会求解页面位置、写出检查预览，并通过 LaTeX/TikZ 把原始 PDF 页面放到大画布上生成矢量 PDF。如果布局仍然断成多个组件，它会保留分组输出和诊断信息，而不是假装已经拼接成功。
 
 ## 📦 Agent 会产出什么？
 

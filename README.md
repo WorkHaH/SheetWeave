@@ -24,7 +24,7 @@
 SheetWeave is an agent skill, not a standalone app you are expected to operate by hand. Give your agent a drawing PDF and ask it to use `$sheetweave`; the skill provides the workflow, scripts, and review checkpoints needed to recover the layout and produce a merged vector PDF.
 
 <p align="center">
-  <img src="assets/sheetweave-overview.svg" alt="SheetWeave turns a tiled drawing PDF into one merged vector PDF through an agent skill" width="100%">
+  <img src="assets/sheetweave-overview.svg" alt="SheetWeave high-level workflow from tiled PDF input to review artifacts and vector PDF output" width="100%">
 </p>
 
 ## 🧭 What Problem Does It Solve?
@@ -105,8 +105,13 @@ The agent should inspect `summary.json` and the PNG preview before treating the 
 ## 🧵 How It Works
 
 <p align="center">
-  <img src="assets/sheetweave-decision-flow.svg" alt="SheetWeave decision flow: overview labels, VLM fallback, or traditional overlap matching" width="100%">
+  <img src="assets/sheetweave-decision-flow.svg" alt="SheetWeave decision flow from overview detection through label routes, overlap fallback, bridge recovery, and vector export" width="100%">
 </p>
+
+1. SheetWeave renders low-resolution page images and extracts PDF text so it can recover layout quickly without using raster images as the final output.
+2. It first checks for an overview or index page, usually at the beginning or end of the PDF. Machine-readable labels become an automatic page-to-region map.
+3. If labels are visible but not machine-readable, the agent should create a manual or VLM layout JSON and rerun with `--overview-layout-json`. If there is no usable overview, no labels, or too few confident matches, SheetWeave falls back to overlap-based neighbor matching.
+4. After it has a page graph, SheetWeave solves placements, writes review previews, and exports a vector PDF by placing the original PDF pages on a larger LaTeX/TikZ canvas. If the merge remains split, it keeps grouped outputs and diagnostics instead of pretending the layout is solved.
 
 ## 📦 What The Agent Produces
 
