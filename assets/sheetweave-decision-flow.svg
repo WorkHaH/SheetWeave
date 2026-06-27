@@ -41,12 +41,12 @@
     <text x="600" y="527" text-anchor="middle" fill="#49605A" font-size="15">machine-readable, visible-only, or absent</text>
 
     <rect x="70" y="604" width="290" height="94" rx="24" fill="#FFFFFF" stroke="#D3E8DF"/>
-    <text x="215" y="639" text-anchor="middle" fill="#0B1720" font-size="20" font-weight="700">Auto label mapping</text>
-    <text x="215" y="665" text-anchor="middle" fill="#49605A" font-size="15">PDF text gives sheet codes</text>
+    <text x="215" y="639" text-anchor="middle" fill="#0B1720" font-size="20" font-weight="700">Manual or VLM JSON</text>
+    <text x="215" y="665" text-anchor="middle" fill="#49605A" font-size="15">visible labels, not extractable</text>
 
     <rect x="455" y="604" width="290" height="94" rx="24" fill="#FFFFFF" stroke="#D3E8DF"/>
-    <text x="600" y="639" text-anchor="middle" fill="#0B1720" font-size="20" font-weight="700">Manual or VLM JSON</text>
-    <text x="600" y="665" text-anchor="middle" fill="#49605A" font-size="15">visible labels, not extractable</text>
+    <text x="600" y="639" text-anchor="middle" fill="#0B1720" font-size="20" font-weight="700">Auto label mapping</text>
+    <text x="600" y="665" text-anchor="middle" fill="#49605A" font-size="15">PDF text gives sheet codes</text>
 
     <rect x="840" y="604" width="290" height="94" rx="24" fill="#FFFFFF" stroke="#D3E8DF"/>
     <text x="985" y="639" text-anchor="middle" fill="#0B1720" font-size="20" font-weight="700">Overlap matching</text>
@@ -96,10 +96,10 @@
     <text x="639" y="453" text-anchor="middle" fill="#FFFFFF">yes</text>
     <rect x="834" y="410" width="96" height="25" rx="12.5" fill="#F1C376"/>
     <text x="882" y="428" text-anchor="middle" fill="#0B1720">no overview</text>
-    <rect x="290" y="570" width="126" height="25" rx="12.5" fill="#1F7A6D"/>
-    <text x="353" y="588" text-anchor="middle" fill="#FFFFFF">machine-readable</text>
-    <rect x="615" y="570" width="86" height="25" rx="12.5" fill="#F1C376"/>
-    <text x="658" y="588" text-anchor="middle" fill="#0B1720">visible only</text>
+    <rect x="290" y="570" width="86" height="25" rx="12.5" fill="#F1C376"/>
+    <text x="333" y="588" text-anchor="middle" fill="#0B1720">visible only</text>
+    <rect x="537" y="570" width="126" height="25" rx="12.5" fill="#1F7A6D"/>
+    <text x="600" y="588" text-anchor="middle" fill="#FFFFFF">machine-readable</text>
     <rect x="800" y="570" width="105" height="25" rx="12.5" fill="#F1C376"/>
     <text x="852" y="588" text-anchor="middle" fill="#0B1720">no labels</text>
 
